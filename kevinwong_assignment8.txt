@@ -1,0 +1,465 @@
+mysql> source C:\Users\Kevin Wong\Desktop\Fall2021CCSF\CS150A mysql\Module9\kevinwong_assignment8.sql
+--------------
+/*	Assignment8.sql
+	Kevin Wong 
+	CS150A Fall 2021 */
+    
+USE restaurant
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+-- Question 1: Write a SELECT statement that finds the average salary for International
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+-- Foods Restaurant (IFR) employees whose manager ID is 200.
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+SELECT AVG(salary) AS Average
+FROM staff
+WHERE manager_id = 200
+--------------
+
++-------------+
+| Average     |
++-------------+
+| 4569.250000 |
++-------------+
+1 row in set (0.00 sec)
+
+--------------
+-- Question 2: Write a SELECT statement that finds the lowest salary, the last name who
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+-- is first in an alphabetical list of employees, and the last name who is last of
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+-- an alphabetical list of employees. Select only employees who are in departments 30 or 60.
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+SELECT dept_id, MIN(salary), MAX(last_name), MIN(last_name)
+FROM staff
+WHERE dept_id = 30 OR dept_id = 60
+ORDER BY last_name
+--------------
+
++---------+-------------+----------------+----------------+
+| dept_id | MIN(salary) | MAX(last_name) | MIN(last_name) |
++---------+-------------+----------------+----------------+
+|      30 |     1879.00 | Zayn           | Lane           |
++---------+-------------+----------------+----------------+
+1 row in set (0.00 sec)
+
+--------------
+-- Question 3: Write a SELECT statement that finds what the most recent hire date of an IFR employee was.
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+SELECT MAX(hire_date) AS "most recent hire date"
+FROM staff
+--------------
+
++-----------------------+
+| most recent hire date |
++-----------------------+
+| 2018-02-14            |
++-----------------------+
+1 row in set (0.00 sec)
+
+--------------
+-- Question 4: Write a SQL statement that creates a list including each employee's first name
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+-- concatenated to a space as well as the employee's last name, and the salary of all employees
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+-- whose last name contains the string 'ar'.
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+SELECT CONCAT(first_name, ' ', last_name) AS 'employee name', 
+	salary
+FROM staff
+WHERE last_name REGEXP 'ar'
+--------------
+
++---------------+---------+
+| employee name | salary  |
++---------------+---------+
+| Rylan Ricardo | 6604.00 |
+| Nora Marcos   | 1879.00 |
++---------------+---------+
+2 rows in set (0.00 sec)
+
+--------------
+-- Question 5:Write a SQL statement that lists the item number and item description for all items.
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+-- The item descriptions should appear in uppercase letters.
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+SELECT item_number,
+	UPPER(description) AS "item description"
+FROM food_items
+--------------
+
++-------------+------------------------+
+| item_number | item description       |
++-------------+------------------------+
+|          80 | CHEESEBURGER           |
+|          81 | DOUBLE CHEESEBURGER    |
+|          82 | SPICY CHICKEN MCBITE   |
+|          83 | CHICKEN SANDWICH       |
+|          84 | SIDE SALA              |
+|          85 | APPLE SLICES           |
+|          86 | SROAST COFFEE          |
+|          87 | BBQ SNACK WRAP         |
+|          90 | HAMBURGER              |
+|          91 | SPICY CHICKEN SANDWICH |
+|          92 | ICED LATTE             |
+|          93 | CHICKEN MCNUGGETS      |
+|          94 | FRUIT & WALNUTS        |
+|          95 | BAKED APPLE PIE        |
+|          96 | SUGAR COOKIE           |
+|          97 | CAESAR SALAD           |
++-------------+------------------------+
+16 rows in set (0.00 sec)
+
+--------------
+-- Question 6: IFR is running a promotion that is valid for up to 20 days after an order is placed.
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+-- Write a SQL statement that lists the order ID, customer ID, first name, and last name.
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+-- The promotion date is 20 days after the order was placed.
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+SELECT order_number,
+	cust_id,
+    first_name,
+    last_name,
+    order_date,
+	DATE_ADD(order_date, INTERVAL 20 DAY) AS promotion_date
+FROM orders AS o 
+	JOIN customers AS c
+    ON o.cust_id = c.customer_id
+--------------
+
++--------------+---------+------------+-------------+------------+----------------+
+| order_number | cust_id | first_name | last_name   | order_date | promotion_date |
++--------------+---------+------------+-------------+------------+----------------+
+|         5343 |      35 | Zachary    | Peter       | 2020-01-03 | 2020-01-23     |
+|         5363 |      20 | Ryan       | Jacob       | 2020-10-03 | 2020-10-23     |
+|         5393 |      45 | Willie     | Bruce       | 2020-08-03 | 2020-08-23     |
+|         5623 |       3 | Michael    | John        | 2020-04-05 | 2020-04-25     |
+|         5679 |      20 | Ryan       | Jacob       | 2020-04-03 | 2020-04-23     |
+|         5681 |      23 | Stephen    | Larry       | 2020-04-04 | 2020-04-24     |
+|         5682 |      40 | Billy      | Marilyn     | 2020-05-09 | 2020-05-29     |
+|         5683 |      50 | Philip     | Judy        | 2020-05-09 | 2020-05-29     |
+|         5690 |       6 | Christi    | Thomas      | 2020-04-21 | 2020-05-11     |
+|         5691 |      29 | Patrick    | Jack        | 2020-07-03 | 2020-07-23     |
+|         5693 |       7 | Charles    | Christopher | 2020-08-19 | 2020-09-08     |
+|         5694 |      30 | Philip     | Dennis      | 2020-07-03 | 2020-07-23     |
+|         5773 |       6 | Christi    | Thomas      | 2020-04-21 | 2020-05-11     |
+|         5783 |       3 | Michael    | John        | 2020-04-05 | 2020-04-25     |
+|         5791 |      40 | Billy      | Marilyn     | 2020-05-09 | 2020-05-29     |
+|         5792 |      50 | Philip     | Judy        | 2020-05-09 | 2020-05-29     |
+|         5793 |      45 | Willie     | Bruce       | 2020-08-03 | 2020-08-23     |
+|         5794 |      30 | Philip     | Dennis      | 2020-07-03 | 2020-07-23     |
+|         5798 |      10 | Thomas     | Rolston     | 2020-03-03 | 2020-03-23     |
+|         5799 |      20 | Ryan       | Jacob       | 2020-04-03 | 2020-04-23     |
+|         6693 |      43 | Evita      | Hodcroft    | 2020-10-03 | 2020-10-23     |
+|         7383 |      43 | Evita      | Hodcroft    | 2020-10-03 | 2020-10-23     |
+|         7693 |      20 | Ryan       | Jacob       | 2020-10-03 | 2020-10-23     |
++--------------+---------+------------+-------------+------------+----------------+
+23 rows in set (0.00 sec)
+
+--------------
+-- Question 7:List the last names and birthdays of IFR employees.
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+-- Convert the birth dates to character data.
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+SELECT last_name,
+	CONVERT(DATE_FORMAT(birthdate, '%W %M %D %Y'), CHAR) AS Birthdate
+FROM staff
+--------------
+
++-----------+------------------------------+
+| last_name | Birthdate                    |
++-----------+------------------------------+
+| Landon    | Sunday December 28th 1969    |
+| Nolan     | Tuesday January 17th 1989    |
+| Griffin   | Monday February 12th 1979    |
+| Lane      | Tuesday January 7th 1975     |
+| Patrick   | Saturday April 11th 1981     |
+| Luka      | Thursday August 22nd 1991    |
+| Ricardo   | Tuesday May 30th 1978        |
+| Steven    | Wednesday July 12th 1978     |
+| Nasir     | Sunday November 21st 1976    |
+| Phillip   | Thursday July 14th 1988      |
+| Collin    | Friday July 30th 1976        |
+| Raymond   | Wednesday August 31st 1983   |
+| Rafael    | Saturday May 3rd 1986        |
+| Colson    | Saturday June 7th 1980       |
+| Spurman   | Thursday July 1st 1982       |
+| Justin    | Wednesday October 19th 1988  |
+| Manuel    | Friday September 12th 1980   |
+| Cooper    | Wednesday July 2nd 1986      |
+| Zayden    | Thursday April 6th 1972      |
+| Marcos    | Wednesday December 31st 1986 |
+| Milan     | Friday May 9th 1980          |
+| Diego     | Thursday June 19th 1997      |
+| Calvin    | Sunday May 9th 1971          |
+| Emanuel   | Saturday November 12th 1983  |
+| Ayaan     | Wednesday March 3rd 1976     |
+| Edison    | Saturday June 7th 1980       |
+| Yusuf     | Wednesday April 19th 1989    |
+| Zayn      | Monday April 25th 1994       |
+| Andy      | Thursday June 28th 1979      |
+| Jeremy    | Tuesday April 2nd 1985       |
++-----------+------------------------------+
+30 rows in set (0.00 sec)
+
+--------------
+-- Question 8: Layla Justinis an employee who has received a $2,000 raise. Display herfirst name,
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+-- last name, current salary, and new salary. Display both salaries with a $ and two decimal places.
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+-- Label hisnew salary column AS New Salary.
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+SELECT first_name,
+	last_name,
+    CONCAT('$', salary)AS 'Current Salary',
+    CONCAT('$', salary + 2000)AS 'New Salary'
+FROM staff
+WHERE first_name = 'Layla' AND last_name = 'Justin'
+--------------
+
++------------+-----------+----------------+------------+
+| first_name | last_name | Current Salary | New Salary |
++------------+-----------+----------------+------------+
+| Layla      | Justin    | $5168.00       | $7168.00   |
++------------+-----------+----------------+------------+
+1 row in set (0.00 sec)
+
+--------------
+-- Question 9: Create a report listing the first and last names and month of hire
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+-- for all employees in the staff table.
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+SELECT CONCAT(first_name, ' ', last_name) AS Name,
+    CONVERT(DATE_FORMAT(hire_date, '%c'), CHAR) AS "Anniversary Month"
+FROM staff
+--------------
+
++-----------------+-------------------+
+| Name            | Anniversary Month |
++-----------------+-------------------+
+| Colton Landon   | 2                 |
+| Jayden Nolan    | 2                 |
+| Katrine Griffin | 2                 |
+| Omar Lane       | 6                 |
+| Nicolas Patrick | 10                |
+| Arthur Luka     | 5                 |
+| Rylan Ricardo   | 3                 |
+| Peter Steven    | 2                 |
+| Emilia Nasir    | 4                 |
+| Sarah Phillip   | 6                 |
+| Baylor Collin   | 6                 |
+| Derek Raymond   | 8                 |
+| Rayna Rafael    | 8                 |
+| Jere Colson     | 8                 |
+| Maya Spurman    | 3                 |
+| Layla Justin    | 2                 |
+| Jake Manuel     | 2                 |
+| Maxwell Cooper  | 3                 |
+| Alex Zayden     | 9                 |
+| Nora Marcos     | 2                 |
+| Frank Milan     | 2                 |
+| Ivan Diego      | 7                 |
+| Mark Calvin     | 8                 |
+| Erik Emanuel    | 3                 |
+| Reed Ayaan      | 8                 |
+| Marvin Edison   | 7                 |
+| Taylor Yusuf    | 3                 |
+| Louis Zayn      | 2                 |
+| Marco Andy      | 2                 |
+| Marcus Jeremy   | 12                |
++-----------------+-------------------+
+30 rows in set (0.00 sec)
+
+--------------
+-- Question 10: Write a SELECT statement that displays the item number and the number of orders placed
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+-- for each item. Show the results in decreasing order and label result column NumOrders.
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+SELECT item_number,
+	quantity AS NumOrders
+FROM order_lines
+ORDER BY NumOrders DESC  -- DOUBLE CHECK THIS LATER
+--------------
+
++-------------+-----------+
+| item_number | NumOrders |
++-------------+-----------+
+|          95 |         4 |
+|          83 |         3 |
+|          80 |         2 |
+|          90 |         2 |
+|          80 |         2 |
+|          90 |         2 |
+|          91 |         2 |
+|          87 |         2 |
+|          80 |         2 |
+|          95 |         2 |
+|          93 |         2 |
+|          80 |         2 |
+|          92 |         2 |
+|          96 |         2 |
+|          90 |         2 |
+|          90 |         2 |
+|          90 |         2 |
+|          97 |         2 |
+|          80 |         2 |
+|          80 |         2 |
+|          82 |         2 |
+|          86 |         2 |
+|          85 |         2 |
+|          81 |         2 |
+|          83 |         2 |
+|          85 |         1 |
+|          83 |         1 |
+|          92 |         1 |
+|          90 |         1 |
+|          95 |         1 |
+|          95 |         1 |
+|          95 |         1 |
+|          82 |         1 |
+|          85 |         1 |
+|          85 |         1 |
+|          87 |         1 |
+|          82 |         1 |
+|          93 |         1 |
+|          80 |         1 |
+|          83 |         1 |
+|          93 |         1 |
++-------------+-----------+
+41 rows in set (0.00 sec)
+
+--------------
+-- Question 11: Write a SQL statement that creates a list of monthly salaries from the staff table where
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+-- the salary is between $700 and $3,000. The salaries should be formatted to include a $-sign and
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+-- have two decimal points like: $9999.99.
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+SELECT staff_id,
+	CONCAT('$', CONVERT(salary, DECIMAL(9, 2))) AS 'Monthly Salary'
+FROM staff
+WHERE salary BETWEEN 700 and 3000
+--------------
+
++----------+----------------+
+| staff_id | Monthly Salary |
++----------+----------------+
+|      125 | $2973.00       |
+|      209 | $1136.00       |
+|      246 | $2128.00       |
+|      524 | $2453.00       |
+|     1292 | $1879.00       |
+|     1544 | $2459.00       |
+|     1611 | $1160.00       |
++----------+----------------+
+7 rows in set (0.00 sec)
+
+mysql> notee
